@@ -69,11 +69,17 @@ class RawNet3(nn.Module):
 
         self.mp3 = nn.MaxPool1d(3)
 
-        # self.new_component = nn.Sequential(
-        #     nn.Linear(256, 256),
-        #     nn.Linear(256, 256),
-        #     nn.Linear(256, 256),
-        # )
+        self.new_component = nn.Sequential(
+            nn.Linear(256, 256),
+            nn.Linear(256, 256),
+            nn.Linear(256, 256),
+            nn.Linear(256, 256),
+            nn.Linear(256, 256),
+            nn.Linear(256, 256),
+            nn.Linear(256, 256),
+            nn.Linear(256, 256),
+            nn.Linear(256, 256)
+        )
 
     def forward(self, x):
         """
@@ -138,7 +144,7 @@ class RawNet3(nn.Module):
 
         if self.out_bn:
             x = self.bn6(x)
-        # x = self.new_component(x)
+        x = self.new_component(x)
         return x
 
 
@@ -147,8 +153,8 @@ def MainModel(**kwargs):
     model = RawNet3(
         Bottle2neck, model_scale=8, context=True, summed=True, out_bn=False, log_sinc=True, norm_sinc="mean", grad_mult=1, **kwargs
     )
-    # for param in model.parameters():
-    #   param.requires_grad = False
-    # for param in model.new_component.parameters():
-    #   param.requires_grad = True
+    for param in model.parameters():
+      param.requires_grad = False
+    for param in model.new_component.parameters():
+      param.requires_grad = True
     return model
